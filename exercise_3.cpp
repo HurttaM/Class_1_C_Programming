@@ -19,22 +19,22 @@ int main(void)
 
     int grades[number_of_students];
 
-    for (int i = 0; i < number_of_students; i++)
+    for (int i = 0; i < number_of_students; i++) //Initializing the array so everything has -1 as a default.
     {
         grades[i] = -1;
     }
 
-    int student_number = -1;
+    int student_number = -1; //Making sure the while loop starts properly with an initialiazation
 
     while (student_number != 0)
     {
-        printf("Enter a student number:\n");
+        printf("Enter a student number between 1 and %d (or type 0 if you want to print the grades):\n", number_of_students);
         scanf("%d", &student_number);
-        if (student_number == 0)
+        if (student_number == 0) //End of the loop condition
         {
             printf("Grades will be printed next.\n");
         }
-        else if (student_number < 1 || student_number > number_of_students)
+        else if (student_number < 1 || student_number > number_of_students) //if student number is less than 1 or more than number of students, incorrect.
         {
             printf("Not a valid student number. Try again\n");
         }
@@ -43,12 +43,12 @@ int main(void)
             int grade;
             printf("Enter student number %d (Valid grades 0-5. Type -1 if no grade was assigned)\n:", student_number);
             scanf("%d", &grade);
-            if ((0 <= grade && grade <= 5) || grade == -1)
+            if (-1 <= grade && grade <= 5) //grade between -1 and 5 is accepted.
             {
                 grades[student_number-1] = grade;
                 printf("Grade %d is stored for student number %d\n", grade, student_number);
             }
-            else
+            else //otherwise back to start of the loop while loop
             {
                 printf("Not a valid grade. Try again\n");
             }
