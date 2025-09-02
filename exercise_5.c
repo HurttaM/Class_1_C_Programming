@@ -57,7 +57,7 @@ int read_range(int low, int high)
             if (selection >= low && selection <= high) {
                 return selection;  // valid input and in range
             } else {
-                printf("That number isn't on even the die... cheater!\n");
+                printf("That number isn't even on the die... cheater!\n");
             }
         } else {
             printf("That's just nonsense. At least give me a number.\n");
