@@ -51,13 +51,13 @@ int read_range(int low, int high)
 {
     int selection = 0;
     do {
-        printf("Roll a die between %d and %d and enter the result: ", low, high);
+        printf("Roll a dice between %d and %d and enter the result: ", low, high);
 
         if (scanf("%d", &selection) == 1) {
             if (selection >= low && selection <= high) {
                 return selection;  // valid input and in range
             } else {
-                printf("That number isn't even on the die... cheater!\n");
+                printf("That number isn't even on the dice... cheater!\n");
             }
         } else {
             printf("That's just nonsense. At least give me a number.\n");
