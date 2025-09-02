@@ -50,7 +50,7 @@ int read_range(int low, int high)
             if (selection >= low && selection <= high) {
                 return selection;  // valid input and in range
             } else {
-                printf("Choose a number between %d and %d.\n", low, high);
+                printf("Not a valid number. Choose a number between %d and %d.\n", low, high);
             }
         } else {
             printf("That's not a number. Please choose between %d and %d.\n", low, high);
