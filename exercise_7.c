@@ -40,7 +40,7 @@ int main() {
 
 bool read_positive(int *value)
 {
- int temp;  // local so we don't modify *value unless input is valid
+ int temp;
 
  printf("Enter a positive number: ");
 
