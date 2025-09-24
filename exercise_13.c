@@ -12,11 +12,6 @@ and highest number that was read from the file. Then program closes the file.
 For testing make a few text files with integers using your favourite text editor.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <limits.h>
-
 void read_numbers_from_file(const char *filename, int *count, int *min, int *max);
 
 int main(void) {
