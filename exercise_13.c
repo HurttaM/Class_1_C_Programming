@@ -65,7 +65,8 @@ void read_numbers_from_file(const char *filename, int *count, int *min, int *max
     }
 
 
-    // Check why the loop stopped
+    // Reading stops if fscanf cannot parse an integer (e.g., encountering text).
+    // This is in line with the assignment requirement "until reading fails or file ends".
     if (feof(fp))
     {
         printf("File read in its entirety.\n");
