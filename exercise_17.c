@@ -1,3 +1,9 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <time.h>
+
 /*
 Write a password generator function that takes three parameters: character pointer, integer (size of
 the array), a const char pointer (a word) and returns a bool. The function generates password and
@@ -19,3 +25,82 @@ Program prints: #m%eGtqrHo&p2o+lBimaY
 You don’t need to use colours. They are just a visual aid. The random characters will naturally be
 different on your program.
  */
+
+bool generate_password(char *out, int out_size, const char *word);
+int read_line(char *buf, int size);
+int rand_printable(void);
+
+int main(void) {
+    char word[32];      // buffer for user input word
+    char password[64];  // output buffer (enough for word*2+1 + '\0')
+
+    srand((unsigned)time(NULL)); // seed random
+
+    printf("Enter a word (max 31 chars), or 'stop' to quit:\n");
+
+    while (1) {
+        printf("");
+        if (!read_line(word, sizeof(word))) {
+            // EOF = stop
+            break;
+        }
+        if (strcmp(word, "stop") == 0) {
+            break;
+        }
+
+        if (generate_password(password, sizeof(password), word)) {
+            printf("%s\n", password);
+        } else {
+            printf("error: output buffer too small\n");
+        }
+    }
+
+    return 0;
+}
+
+// Read one line into buf, strip newline. Return 1 on success, 0 on EOF.
+int read_line(char *buf, int size) {
+    if (!fgets(buf, size, stdin)) {
+        return 0;
+    }
+    size_t len = strlen(buf);
+    if (len > 0 && buf[len - 1] == '\n') {
+        buf[len - 1] = '\0';
+    }
+    return 1;
+}
+
+// Return a random printable ASCII character (codes 33..126).
+int rand_printable(void) {
+    return rand() % 94 + 33;
+}
+
+// Build password of length word_len*2+1. Pattern:
+// first random, then alternate word[i], random ... ending with random.
+// Ensure proper null termination.
+bool generate_password(char *out, int out_size, const char *word) {
+    int wlen = (int)strlen(word);
+    int need = wlen * 2 + 1;   // visible chars
+    int total = need + 1;      // +1 for '\0'
+
+    if (out_size < total) {
+        return false;
+    }
+
+    int i = 0;
+    int pos = 0;
+
+    // start with a random
+    out[pos++] = (char)rand_printable();
+
+    // alternate word[i], random
+    for (i = 0; i < wlen; i++) {
+        out[pos++] = word[i];
+        out[pos++] = (char)rand_printable();
+    }
+
+    // terminate string
+    out[pos] = '\0';
+
+    return true;
+}

@@ -32,7 +32,7 @@ int main(void) {
     printf("Enter integers (one per line). Type 'end' to finish.\n");
 
     for (;;) {
-        printf("> ");
+        printf("");
         if (!read_line(line, sizeof line)) {
             // EOF -> behave like "end"
             break;
