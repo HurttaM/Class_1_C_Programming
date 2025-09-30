@@ -14,39 +14,51 @@ When user enters end the program prints all entered numbers, frees the allocated
 ends.
  */
 
+
 struct node *create_node(int value);             // allocate and init a node
 void list_append(struct node **head, int value); // append with double pointer
 void list_print(const struct node *head);        // print list contents
 void list_free(struct node **head);              // free the whole list
 int read_line(char *buf, size_t size);           // read one line, strip newline
 
+
 typedef struct node {
     int number;
     struct node *next;
 } nnode;
 
-int main(void) {
+int main(void)
+{
     nnode *head = NULL;
     char line[128];
+    int done = 0;  // loop control flag
 
     printf("Enter integers (one per line). Type 'end' to finish.\n");
 
-    for (;;) {
+    while (!done)
+    {
         printf("");
-        if (!read_line(line, sizeof line)) {
-            // EOF -> behave like "end"
-            break;
-        }
 
-        if (strcmp(line, "end") == 0) {
-            break;
+        if (!read_line(line, sizeof line))
+        {
+            // EOF: treat like "end"
+            done = 1;
         }
-
-        int value;
-        if (sscanf(line, "%d", &value) == 1) {
-            list_append(&head, value);
-        } else {
-            printf("invalid input\n");
+        else if (strcmp(line, "end") == 0)
+        {
+            done = 1;
+        }
+        else
+        {
+            int value;
+            if (sscanf(line, "%d", &value) == 1)
+            {
+                list_append(&head, value);
+            }
+            else
+            {
+                printf("invalid input\n");
+            }
         }
     }
 
@@ -55,14 +67,18 @@ int main(void) {
     return 0;
 }
 
+// ------------------- Function definitions -------------------
 
 // Read one line from stdin, strip trailing newline. Return 1 on success, 0 on EOF.
-int read_line(char *buf, size_t size) {
-    if (!fgets(buf, size, stdin)) {
+int read_line(char *buf, size_t size)
+{
+    if (!fgets(buf, size, stdin))
+    {
         return 0;
     }
     size_t len = strlen(buf);
-    if (len > 0 && buf[len - 1] == '\n') {
+    if (len > 0 && buf[len - 1] == '\n')
+    {
         buf[len - 1] = '\0';
     }
     return 1;
@@ -71,7 +87,8 @@ int read_line(char *buf, size_t size) {
 // Create a new node with given value.
 nnode *create_node(int value) {
     nnode *nd = (nnode *)malloc(sizeof *nd);
-    if (!nd) {
+    if (!nd)
+    {
         fprintf(stderr, "memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
@@ -81,25 +98,31 @@ nnode *create_node(int value) {
 }
 
 // Append a new node at the end using double pointer.
-void list_append(nnode **head, int value) {
-    while (*head) {
+void list_append(nnode **head, int value)
+{
+    while (*head)
+    {
         head = &(*head)->next;
     }
     *head = create_node(value);
 }
 
 // Print all numbers in the list.
-void list_print(const nnode *head) {
+void list_print(const nnode *head)
+{
     printf("Numbers entered:\n");
-    for (const nnode *p = head; p; p = p->next) {
+    for (const nnode *p = head; p; p = p->next)
+    {
         printf("%d\n", p->number);
     }
 }
 
 // Free the whole list and set head to NULL.
-void list_free(nnode **head) {
+void list_free(nnode **head)
+{
     nnode *p = *head;
-    while (p) {
+    while (p)
+    {
         nnode *next = p->next;
         free(p);
         p = next;

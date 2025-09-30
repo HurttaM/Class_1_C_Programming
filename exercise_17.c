@@ -30,27 +30,34 @@ bool generate_password(char *out, int out_size, const char *word);
 int read_line(char *buf, int size);
 int rand_printable(void);
 
-int main(void) {
+int main(void)
+{
     char word[32];      // buffer for user input word
     char password[64];  // output buffer (enough for word*2+1 + '\0')
+    int done = 0;       // loop control flag
 
     srand((unsigned)time(NULL)); // seed random
 
     printf("Enter a word (max 31 chars), or 'stop' to quit:\n");
 
-    while (1) {
-        printf("");
-        if (!read_line(word, sizeof(word))) {
+    while (!done)
+    {
+        printf("> ");
+        if (!read_line(word, sizeof(word)))
+        {
             // EOF = stop
-            break;
+            done = 1;
         }
-        if (strcmp(word, "stop") == 0) {
-            break;
+        else if (strcmp(word, "stop") == 0)
+        {
+            done = 1;
         }
-
-        if (generate_password(password, sizeof(password), word)) {
+        else if (generate_password(password, sizeof(password), word))
+        {
             printf("%s\n", password);
-        } else {
+        }
+        else
+        {
             printf("error: output buffer too small\n");
         }
     }
@@ -58,43 +65,51 @@ int main(void) {
     return 0;
 }
 
+
 // Read one line into buf, strip newline. Return 1 on success, 0 on EOF.
-int read_line(char *buf, int size) {
-    if (!fgets(buf, size, stdin)) {
+int read_line(char *buf, int size)
+{
+    if (!fgets(buf, size, stdin))
+    {
         return 0;
     }
     size_t len = strlen(buf);
-    if (len > 0 && buf[len - 1] == '\n') {
+    if (len > 0 && buf[len - 1] == '\n')
+    {
         buf[len - 1] = '\0';
     }
     return 1;
 }
 
 // Return a random printable ASCII character (codes 33..126).
-int rand_printable(void) {
+int rand_printable(void)
+{
     return rand() % 94 + 33;
 }
 
-// Build password of length word_len*2+1. Pattern:
-// first random, then alternate word[i], random ... ending with random.
-// Ensure proper null termination.
-bool generate_password(char *out, int out_size, const char *word) {
+/*
+Build password of length word_len*2+1.
+Pattern: first random, then alternate word[i], random ... ending with random.
+Ensure proper null termination. */
+bool generate_password(char *out, int out_size, const char *word)
+{
     int wlen = (int)strlen(word);
     int need = wlen * 2 + 1;   // visible chars
     int total = need + 1;      // +1 for '\0'
 
-    if (out_size < total) {
+    if (out_size < total)
+    {
         return false;
     }
 
-    int i = 0;
     int pos = 0;
 
     // start with a random
     out[pos++] = (char)rand_printable();
 
     // alternate word[i], random
-    for (i = 0; i < wlen; i++) {
+    for (int i = 0; i < wlen; i++)
+    {
         out[pos++] = word[i];
         out[pos++] = (char)rand_printable();
     }
