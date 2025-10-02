@@ -31,7 +31,7 @@ int main(void)
 {
     nnode *head = NULL;
     char line[128];
-    int done = 0;  // loop control flag
+    int done = 0;  // loop control
 
     printf("Enter integers (one per line). Type 'end' to finish.\n");
 
@@ -67,7 +67,6 @@ int main(void)
     return 0;
 }
 
-// ------------------- Function definitions -------------------
 
 // Read one line from stdin, strip trailing newline. Return 1 on success, 0 on EOF.
 int read_line(char *buf, size_t size)
