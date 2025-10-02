@@ -34,7 +34,7 @@ int main(void)
 {
     char word[32];      // buffer for user input word
     char password[64];  // output buffer (enough for word*2+1 + '\0')
-    int done = 0;       // loop control flag
+    int done = 0;       // loop control
 
     srand((unsigned)time(NULL)); // seed random
 
@@ -66,7 +66,7 @@ int main(void)
 }
 
 
-// Read one line into buf, strip newline. Return 1 on success, 0 on EOF.
+// Read one line into buffer, strip newline. Return 1 on success, 0 on EOF.
 int read_line(char *buf, int size)
 {
     if (!fgets(buf, size, stdin))
@@ -89,8 +89,8 @@ int rand_printable(void)
 
 /*
 Build password of length word_len*2+1.
-Pattern: first random, then alternate word[i], random ... ending with random.
-Ensure proper null termination. */
+First random, then alternate word[i], random ... ending with random.
+Proper null termination. */
 bool generate_password(char *out, int out_size, const char *word)
 {
     int wlen = (int)strlen(word);
