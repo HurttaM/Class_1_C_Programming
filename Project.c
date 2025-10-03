@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
-/* GENERAL INSTURCTIONS
+/* GENERAL INSTRUCTIONS
 
 Global variables may not be used in any of the assignments.
 Write user friendly programs:
