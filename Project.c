@@ -160,14 +160,20 @@ char* get_line(char *buffer, int size)
 }
 
 //Keeps asking until user types a non-empty line (eg. for names)
+//Limited retries to prevent infinite loop if input keeps failing
 void read_nonempty_line(const char *prompt, char *buffer, int size)
 {
-    for (;;)
+    int attempts = 0;
+    const int MAX_ATTEMPTS = 5;
+    int success = 0;
+
+    while (!success && attempts < MAX_ATTEMPTS)
     {
         printf("%s", prompt);
         if (!get_line(buffer, size))
         {
             printf("Error: input failed, try again.\n");
+            attempts++;
             continue;
         }
         // trim whitespace
@@ -176,41 +182,73 @@ void read_nonempty_line(const char *prompt, char *buffer, int size)
         char *end = start + strlen(start);
         while (end > start && isspace((unsigned char)end[-1])) end--;
         *end = '\0';
+
         if (*start == '\0')
         {
             printf("Error: input cannot be empty.\n");
+            attempts++;
             continue;
         }
+
         if (start != buffer) memmove(buffer, start, strlen(start) + 1);
-        return;
+        success = 1; // success, break loop
+    }
+
+    if (!success)
+    {
+        printf("Too many invalid attempts. Exiting.\n");
+        exit(1);
     }
 }
 
-//Reads one integer from the user. Repeats until input is valid
-int read_integer(const char *prompt) {
+//Reads one integer from the user. Repeats until input is valid (limited retries)
+int read_integer(const char *prompt)
+{
     int value;
-    for (;;) {
+    int attempts = 0;
+    const int MAX_ATTEMPTS = 5;
+
+    while (attempts < MAX_ATTEMPTS)
+    {
         printf("%s", prompt);
-        if (scanf("%d", &value) == 1) {
+        if (scanf("%d", &value) == 1)
+        {
             int ch;
             while ((ch = getchar()) != '\n' && ch != EOF) { } // flush
             return value;
         }
         printf("Error: please enter an integer value.\n");
+        attempts++;
         scanf("%*s"); // discard invalid token
     }
+
+    printf("Too many invalid attempts. Exiting.\n");
+    exit(1);
 }
 
 // Reads an integer and checks that it is between min and max (inclusive).
-int read_integer_in_range(const char *prompt, int min, int max) {
-    for (;;) {
+// Retry limit to avoid infinite loops
+int read_integer_in_range(const char *prompt, int min, int max)
+{
+    int attempts = 0;
+    const int MAX_ATTEMPTS = 5;
+
+    while (attempts < MAX_ATTEMPTS)
+    {
         int v = read_integer(prompt);
-        if (v < min || v > max) {
+        if (v < min || v > max)
+        {
             printf("Error: value must be between %d and %d.\n", min, max);
-        } else {
+            attempts++;
+        }
+        else
+        {
             return v;
         }
     }
+
+    printf("Too many invalid attempts. Exiting.\n");
+    exit(1);
 }
 
 //Convert a 0–100 percentage score into grade 0–5.
